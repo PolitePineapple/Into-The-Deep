@@ -1,0 +1,61 @@
+//this is not final and im just trying stuff
+
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+//below is for PID Constants
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+@Config
+public class PIDConstants {
+  public static double Kp = 1.8;
+  public static double Ki = 0.0;
+  public static double Kd = 0.031;
+}
+  
+
+
+//below is for actual IMU and mapping and blah blah
+public class Drivetrain {
+    public DcMotor topLeftDriveMotor;
+    public DcMotor bottomLeftDriveMotor;
+    public DcMotor topRightDriveMotor;
+    public DcMotor bottomRightDriveMotor;
+
+    HardwareMap hwMap;
+
+    public void init(HardwareMap ahwMap) {
+
+        hwMap = ahwMap;
+
+        // Control HUb motors
+        rightfrontDriveMotor = hwMap.get(DcMotor.class, "rightfront");
+        leftfrontDriveMotor = hwMap.get(DcMotor.class, "leftfront");
+        rightbackDriveMotor = hwMap.get(DcMotor.class, "rightback");
+        leftbackDriveMotor = hwMap.get(DcMotor.class, "leftback");
+
+
+        /**
+         * Allow the 4 wheel motors to be run without encoders since we are doing a time based autonomous
+         * **/
+        rightfrontDriveMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftfrontDriveMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightbackDriveMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftbackDriveMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+    }
+
+    public void power(double output){
+        rightfrontDriveMotor.setPower(-output);
+        leftfrontDriveMotor.setPower(-output);
+        rightbackDriveMotor.setPower(output);
+        leftbackDriveMotor.setPower(output);
+    }
+}
